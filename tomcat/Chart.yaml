@@ -8,7 +8,7 @@ dependencies:
   repository: https://charts.bitnami.com/bitnami
   tags:
   - bitnami-common
-  version: 2.x.x
+  version: 2.4.40
 description: Apache Tomcat is an open-source web server designed to host and run Java-based
   web applications. It is a lightweight server with a good performance for applications
   running in production environments.

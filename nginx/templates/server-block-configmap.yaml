@@ -1,8 +1,9 @@
+{{- if and .Values.serverBlock (not .Values.existingServerBlockConfigmap) }}
 apiVersion: v1
-kind: Secret
+kind: ConfigMap
 metadata:
-  name: {{ template "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace }}
+  name: {{ template "common.names.fullname" . }}-server-block
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -10,6 +11,7 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-type: Opaque
 data:
-  tomcat-password: {{ include "common.secrets.passwords.manage" (dict "secret" (include "common.names.fullname" .) "key" "tomcat-password" "providedValues" (list "tomcatPassword") "length" 10 "strong" false "context" $) }}
+  server-block.conf: |-
+    {{- include "common.tplvalues.render" ( dict "value" .Values.serverBlock "context" $ ) | nindent 4 }}
+{{- end }}
